@@ -924,12 +924,13 @@ impl<'a> TextureAnyMipmap<'a> {
                                             y: Range<u32>, z: Range<u32>, inverted: bool)
                                             where P: PixelValue
     {
+        let texdepth = self.depth.or(self.get_array_size()).unwrap_or(0);
         assert!(x.start <= self.width);
         assert!(y.start <= self.height.unwrap_or(0));
-        assert!(z.start <= self.depth.unwrap_or(0));
+        assert!(z.start <= texdepth);
         assert!(x.end <= self.width);
         assert!(y.end <= self.height.unwrap_or(1));
-        assert!(z.end <= self.depth.unwrap_or(1));
+        assert!(z.end <= texdepth);
 
         let width = x.end - x.start;
         let height = y.end - y.start;
