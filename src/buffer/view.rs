@@ -113,7 +113,10 @@ impl<T: ?Sized> Buffer<T> where T: Content {
     ///
     /// Panics if the length of `data` is different from the length of this buffer.
     pub fn write(&self, data: &T) {
-        assert!(mem::size_of_val(data) == self.get_size());
+        let data_size = mem::size_of_val(data);
+        assert!(data_size == self.get_size(),
+                format!("Failed attempt to write {} bytes into a buffer of different size({})",
+                        data_size, self.get_size()));
 
         self.fence.as_ref().unwrap().wait(&mut self.alloc.as_ref().unwrap().get_context().make_current(),
                                           0 .. self.get_size());
